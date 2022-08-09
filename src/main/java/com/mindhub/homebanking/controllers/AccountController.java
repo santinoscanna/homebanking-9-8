@@ -19,7 +19,7 @@ public class AccountController {
     private AccountRepository accountRepository;
 
     @RequestMapping("/accounts")
-    public Set<AccountDTO> getaccounts () {
+    public Set<AccountDTO> getcuenta () {
         return this.accountRepository.findAll().stream().map(account -> new AccountDTO(account)).collect(Collectors.toSet()); // .stream
     }
 
