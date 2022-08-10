@@ -1,10 +1,7 @@
 package com.mindhub.homebanking;
 
 import com.mindhub.homebanking.models.*;
-import com.mindhub.homebanking.repositories.AccountRepository;
-import com.mindhub.homebanking.repositories.ClientRepository;
-import com.mindhub.homebanking.repositories.LoanRepository;
-import com.mindhub.homebanking.repositories.TransactionRepository;
+import com.mindhub.homebanking.repositories.*;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -24,7 +21,7 @@ public class HomebankingApplication {
 	}
 
 	@Bean		// Metodo para generar datos de prueba.
-	public CommandLineRunner initData(ClientRepository clientRepository, AccountRepository accountRepository, TransactionRepository transactionRepository, LoanRepository loanRepository) {
+	public CommandLineRunner initData(ClientRepository clientRepository, AccountRepository accountRepository, TransactionRepository transactionRepository, LoanRepository loanRepository, ClientLoanRepository clientLoanRepository) {
 		return (args)->
 		{
 			LocalDateTime tiempo1 = LocalDateTime.now();
@@ -36,10 +33,20 @@ public class HomebankingApplication {
 
 			client1.addAccount(account1);
 			client1.addAccount(account2);
-
 			clientRepository.save(client1);
 			accountRepository.save(account1);
 			accountRepository.save(account2);
+
+			Client client2 = new Client("Carlos", "Tevez", "tevez@gmail.com");
+			Account account3 = new Account("VIN003", tiempo1,  4000);
+			Account account4 = new Account("VIN004", tiempo2,  3500);
+
+			client2.addAccount(account3);
+			client2.addAccount(account4);
+
+			clientRepository.save(client2);
+			accountRepository.save(account3);
+			accountRepository.save(account4);
 
 			Transaction transaction1 = new Transaction(TransactionType.CREDIT, 2000, "transferencia recibida", LocalDateTime.now(), account1);
 			Transaction transaction2 = new Transaction(TransactionType.DEBIT, -4000, "Compra tienda x1", LocalDateTime.now(), account1);
@@ -60,6 +67,15 @@ public class HomebankingApplication {
 			loanRepository.save(loan2);
 			loanRepository.save(loan3);
 
+			ClientLoan clientLoan1 = new ClientLoan(400000, 60, client1, loan1);
+			ClientLoan clientLoan2 = new ClientLoan(50000, 12, client1, loan2);
+			ClientLoan clientLoan3 = new ClientLoan(100000, 24, client2, loan2);
+			ClientLoan clientLoan4 = new ClientLoan(200000, 36, client2, loan3);
+
+			clientLoanRepository.save(clientLoan1);
+			clientLoanRepository.save(clientLoan2);
+			clientLoanRepository.save(clientLoan3);
+			clientLoanRepository.save(clientLoan4);
 
 		};
 	}
