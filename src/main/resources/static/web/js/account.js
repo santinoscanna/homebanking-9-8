@@ -1,15 +1,18 @@
 var app = new Vue({
     el:"#app",
     data:{
-        clientInfo: {},
+        accountInfo: {},
         error: null
     },
     methods:{
         getData: function(){
-            axios.get("/api/clients/1")
+            const urlParams = new URLSearchParams(window.location.search);
+            const id = urlParams.get('id');
+            axios.get(`/api/accounts/${id}`)
             .then(function (response) {
                 //get client ifo
-                app.clientInfo = response.data;
+                app.accountInfo = response.data;
+                app.accountInfo.transactions.sort((a,b) => parseInt(b.id - a.id))
             })
             .catch(function (error) {
                 // handle error
