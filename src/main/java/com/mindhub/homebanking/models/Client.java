@@ -67,6 +67,9 @@ public class Client {
         return accounts;
     }
 
+    public Set<ClientLoan> getClientLoans() {
+        return clientLoans;
+    }
     public void setAccounts(Set<Account> accounts) {
         this.accounts = accounts;
     }
@@ -76,7 +79,6 @@ public class Client {
         accounts.add(account);
     }
 
-    @JsonIgnore
     public Set<Loan> getLoans(){ return clientLoans.stream().map(clientLoan -> clientLoan.getLoan()).collect(Collectors.toSet()); }
 
     public void setClientLoans(Set<ClientLoan> clientLoans) {
