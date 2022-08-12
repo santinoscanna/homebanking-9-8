@@ -21,7 +21,7 @@ public class HomebankingApplication {
 	}
 
 	@Bean		// Metodo para generar datos de prueba.
-	public CommandLineRunner initData(ClientRepository clientRepository, AccountRepository accountRepository, TransactionRepository transactionRepository, LoanRepository loanRepository, ClientLoanRepository clientLoanRepository) {
+	public CommandLineRunner initData(ClientRepository clientRepository, AccountRepository accountRepository, TransactionRepository transactionRepository, LoanRepository loanRepository, ClientLoanRepository clientLoanRepository, CardRepository cardRepository) {
 		return (args)->
 		{
 			LocalDateTime tiempo1 = LocalDateTime.now();
@@ -77,6 +77,15 @@ public class HomebankingApplication {
 			clientLoanRepository.save(clientLoan3);
 			clientLoanRepository.save(clientLoan4);
 
+			LocalDateTime tiempo3 = LocalDateTime.now().plusYears(5);
+
+			Card card1 = new Card(client1, CardType.DEBIT , CardColor.GOLDEN, "155687952345", 123, tiempo1, tiempo3);
+			Card card2 = new Card(client1, CardType.CREDIT, CardColor.TITANIUM, "258896325877", 358, tiempo1, tiempo3);
+			Card card3 = new Card(client2 , CardType.CREDIT, CardColor.SILVER, "596842713365", 574, tiempo1, tiempo3);
+
+			cardRepository.save(card1);
+			cardRepository.save(card2);
+			cardRepository.save(card3);
 		};
 	}
 }
