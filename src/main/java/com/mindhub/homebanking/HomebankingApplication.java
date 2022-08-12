@@ -79,13 +79,15 @@ public class HomebankingApplication {
 
 			LocalDateTime tiempo3 = LocalDateTime.now().plusYears(5);
 
-			Card card1 = new Card(client1, CardType.DEBIT , CardColor.GOLDEN, "155687952345", 123, tiempo1, tiempo3);
-			Card card2 = new Card(client1, CardType.CREDIT, CardColor.TITANIUM, "258896325877", 358, tiempo1, tiempo3);
-			Card card3 = new Card(client2 , CardType.CREDIT, CardColor.SILVER, "596842713365", 574, tiempo1, tiempo3);
+			Card card1 = new Card(client1, CardType.DEBIT , CardColor.GOLDEN, "1556 8795 2345 1589", 123, tiempo1, tiempo3);
+			Card card2 = new Card(client1, CardType.CREDIT, CardColor.TITANIUM, "2588 9632 5877 1893", 358, tiempo1, tiempo3);
+			Card card3 = new Card(client2 , CardType.CREDIT, CardColor.SILVER, "5968 4271 3365 7583", 574, tiempo1, tiempo3);
 
 			cardRepository.save(card1);
 			cardRepository.save(card2);
 			cardRepository.save(card3);
+
+
 		};
 	}
 }
