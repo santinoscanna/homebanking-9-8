@@ -43,7 +43,6 @@ public class CardController {
             return new ResponseEntity<>("Ya tiene 3 tarjetas de este tipo", HttpStatus.FORBIDDEN);
         }
         Card card = new Card(client, cardType, cardColor);
-        client.addCard(card);
         cardRepository.save(card);
         return new ResponseEntity<>("201 creada", HttpStatus.CREATED);
     }
