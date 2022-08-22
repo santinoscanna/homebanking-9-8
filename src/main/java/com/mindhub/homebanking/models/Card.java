@@ -40,6 +40,7 @@ public class Card {
 
     public Card(Client client, CardType type, CardColor color) {
         this.client = client;
+        this.cardholder = client.getFullName();
         this.type = type;
         this.color = color;
         this.number = getFullNumber();

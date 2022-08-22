@@ -39,7 +39,8 @@
 }
 
 .titanium-plastic-card{
-	background: linear-gradient(45deg,#6ea3e0,#185781);
+
+	background: black; /*linear-gradient(45deg,#6ea3e0,#185781);*/
 }
 
 

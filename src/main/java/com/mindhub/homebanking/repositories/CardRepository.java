@@ -11,5 +11,6 @@ import java.util.List;
 @RepositoryRestResource
 public interface CardRepository extends JpaRepository<Card, Long> {
     List<Card> findByClientAndType(Client client, CardType type);
+    Card findByNumber(String number);
 
 }
