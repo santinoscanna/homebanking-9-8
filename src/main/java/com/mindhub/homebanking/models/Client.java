@@ -93,6 +93,11 @@ public class Client {
         accounts.add(account);
     }
 
+    public void addCard(Card card) {
+        card.setClient(this);
+        cards.add(card);
+    }
+
     public Set<Loan> getLoans(){ return clientLoans.stream().map(clientLoan -> clientLoan.getLoan()).collect(Collectors.toSet()); }
 
     public void setClientLoans(Set<ClientLoan> clientLoans) {

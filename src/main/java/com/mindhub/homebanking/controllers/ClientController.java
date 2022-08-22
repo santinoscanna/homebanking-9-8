@@ -20,6 +20,9 @@ public class ClientController {
     @Autowired // Voy a poder usar el repository para obtener información
     private ClientRepository clientRepository;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     @RequestMapping("/clients")
     public Set<ClientDTO> getclients () {
         return this.clientRepository.findAll().stream().map(ClientDTO::new).collect(Collectors.toSet()); // .stream
@@ -29,12 +32,10 @@ public class ClientController {
     // Preguntar sobre esto que no quedó claro //
     @RequestMapping("/clients/{id}")
     public ClientDTO getClients(@PathVariable Long id) {
-        if(clientRepository.findById(id).isPresent())
+        if (clientRepository.findById(id).isPresent())
             return new ClientDTO(clientRepository.findById(id).get());
         return null;
     }
-    @Autowired
-    private PasswordEncoder passwordEncoder;
 
     @RequestMapping("/clients/current")
     public ClientDTO getClient(Authentication authentication){

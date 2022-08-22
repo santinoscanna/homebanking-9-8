@@ -38,6 +38,24 @@ public class Card {
         this.thruDate = thruDate;
     }
 
+    public Card(Client client, CardType type, CardColor color) {
+        this.client = client;
+        this.type = type;
+        this.color = color;
+        this.number = getFullNumber();
+        this.cvv = ((int)((Math.random()*(999-100))+100));
+        this.fromDate = LocalDateTime.now();
+        this.thruDate = LocalDateTime.now().plusYears(5);
+    }
+
+    public String getFullNumber() {     //Genero 4 numeros y los concateno para crear el numero de la Card
+        int num1 = (int) ((Math.random() * (9999 - 1000)) + 1000);
+        int num2 = (int) ((Math.random() * (9999 - 1000)) + 1000);
+        int num3 = (int) ((Math.random() * (9999 - 1000)) + 1000);
+        int num4 = (int) ((Math.random() * (9999 - 1000)) + 1000);
+        return num1 + "-" + num2 + "-" + num3 + "-" + num4;
+    }
+
     public long getId() {
         return id;
     }
