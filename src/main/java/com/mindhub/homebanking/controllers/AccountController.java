@@ -20,6 +20,8 @@ import java.time.LocalDateTime;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import static com.mindhub.homebanking.utils.AccountUtils.generateAccountNumber;
+
 @RestController
 @RequestMapping("/api")
 public class AccountController {
@@ -49,13 +51,10 @@ public class AccountController {
         if(client.getAccounts().size() >= 3){
             return new ResponseEntity<>("Ya tiene 3 cuentas", HttpStatus.FORBIDDEN);
         }
-        Account account = new Account(generateAccountNumber(), LocalDateTime.now(), 0);
+        Account account = new Account(generateAccountNumber(10000000, 99999999, accountRepository), LocalDateTime.now(), 0);
         client.addAccount(account);
         accountRepository.save(account);
         return new ResponseEntity<>("201 creada", HttpStatus.CREATED);
     }
 
-    public String generateAccountNumber(){
-        return "VIN"+((int)((Math.random()*(99999999-10000000))+10000000));
-    }
 }
