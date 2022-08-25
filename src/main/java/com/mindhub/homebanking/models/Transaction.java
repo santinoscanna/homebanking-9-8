@@ -31,6 +31,13 @@ public class Transaction {
         this.account = account;
     }
 
+    public Transaction(TransactionType type, double amount, String description, Account account) {
+        this.type = type;
+        this.amount = amount;
+        this.description = description;
+        this.date = LocalDateTime.now();
+    }
+
     public Long getId() {
         return id;
     }

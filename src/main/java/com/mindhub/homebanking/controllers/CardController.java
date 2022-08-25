@@ -1,6 +1,5 @@
 package com.mindhub.homebanking.controllers;
 
-import com.mindhub.homebanking.dtos.AccountDTO;
 import com.mindhub.homebanking.dtos.CardDTO;
 import com.mindhub.homebanking.models.Card;
 import com.mindhub.homebanking.models.CardColor;
@@ -31,7 +30,6 @@ public class CardController {
     @Autowired
     private ClientRepository clientRepository;
 
-
     @RequestMapping("/cards")
     public Set<CardDTO> getcards () {
         return this.cardRepository.findAll().stream().map(card -> new CardDTO(card)).collect(Collectors.toSet());
@@ -48,5 +46,4 @@ public class CardController {
         cardRepository.save(card);
         return new ResponseEntity<>("201 creada", HttpStatus.CREATED);
     }
-
 }

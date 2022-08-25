@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -44,6 +45,13 @@ public class AccountController {
         return null;
     }
 
+    // Obtengo las cuentas del cliente autenticado
+    @RequestMapping(value = "/clients/current/accounts", method = RequestMethod.GET)
+    public List<AccountDTO> getCurrentClientAccounts(Authentication authentication){
+        Client client = clientRepository.findByEmail(authentication.getName());
+        return client.getAccounts().stream().map(AccountDTO::new).collect(Collectors.toList());
+    }
+
     @RequestMapping(path = "/clients/current/accounts", method = RequestMethod.POST)
     public ResponseEntity<Object> createAccount(Authentication authentication){
         Client client = this.clientRepository.findByEmail(authentication.getName());
@@ -56,5 +64,4 @@ public class AccountController {
         accountRepository.save(account);
         return new ResponseEntity<>("201 creada", HttpStatus.CREATED);
     }
-
 }
