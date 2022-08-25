@@ -34,6 +34,8 @@ public class WebAuthorization extends WebSecurityConfigurerAdapter {
 
         http.csrf().disable();
 
+        http.headers().frameOptions().disable();
+
         // if user is not authenticated, just send an authentication failure response
         http.exceptionHandling().authenticationEntryPoint((req, res, exc) -> res.sendError(HttpServletResponse.SC_UNAUTHORIZED));
 
