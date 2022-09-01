@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static com.mindhub.homebanking.utils.CardUtils.generateCardNumber;
+import static com.mindhub.homebanking.utils.CardUtils.*;
 
 @RestController
 @RequestMapping("/api")
@@ -42,7 +42,7 @@ public class CardController {
         if (cardRepository.findByClientAndType(client, cardType).size()>=3){
             return new ResponseEntity<>("Ya tiene 3 tarjetas de este tipo", HttpStatus.FORBIDDEN);
         }
-        Card card = new Card(client, cardType, cardColor, generateCardNumber(1000, 9999, cardRepository));
+        Card card = new Card(client, cardType, cardColor, generateCardNumber(1000, 9999, cardRepository), generateCvv(100, 999, cardRepository));
         cardRepository.save(card);
         return new ResponseEntity<>("201 creada", HttpStatus.CREATED);
     }
