@@ -11,12 +11,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -31,20 +29,27 @@ public class AccountController {
     @Autowired
     private ClientRepository clientRepository;
 
-    @RequestMapping("/accounts")
+    @GetMapping("/accounts")
     public Set<AccountDTO> getaccounts () {
         return this.accountRepository.findAll().stream().map(account -> new AccountDTO(account)).collect(Collectors.toSet());
     }
 
     // Preguntar sobre esto que no quedó claro //
-    @RequestMapping("/accounts/{id}")
+    @GetMapping("/accounts/{id}")
     public AccountDTO getAccounts(@PathVariable Long id) {
         if(accountRepository.findById(id).isPresent())
             return new AccountDTO(accountRepository.findById(id).get());
         return null;
     }
 
-    @RequestMapping(path = "/clients/current/accounts", method = RequestMethod.POST)
+    // Obtengo las cuentas del cliente autenticado
+    @GetMapping("/clients/current/accounts")
+    public List<AccountDTO> getCurrentClientAccounts(Authentication authentication){
+        Client client = clientRepository.findByEmail(authentication.getName());
+        return client.getAccounts().stream().map(AccountDTO::new).collect(Collectors.toList());
+    }
+
+    @PostMapping("/clients/current/accounts")
     public ResponseEntity<Object> createAccount(Authentication authentication){
         Client client = this.clientRepository.findByEmail(authentication.getName());
 
@@ -56,5 +61,4 @@ public class AccountController {
         accountRepository.save(account);
         return new ResponseEntity<>("201 creada", HttpStatus.CREATED);
     }
-
 }

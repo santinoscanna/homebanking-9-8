@@ -40,16 +40,18 @@ public class Card {
         this.thruDate = thruDate;
     }
 
-    public Card(Client client, CardType type, CardColor color, String number) {
+    public Card(Client client, CardType type, CardColor color, String number, int cvv) {
         this.client = client;
         this.cardholder = client.getFullName();
         this.type = type;
         this.color = color;
         this.number = number;
-        this.cvv = ((int)((Math.random()*(999-100))+100));
+        this.cvv = cvv;
         this.fromDate = LocalDateTime.now();
         this.thruDate = LocalDateTime.now().plusYears(5);
     }
+
+
 
     public long getId() {
         return id;

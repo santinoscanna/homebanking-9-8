@@ -8,6 +8,7 @@ import java.util.Set;
 
 @Entity
 public class ClientLoan {
+    public long getClientLoanId;
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
     @GenericGenerator(name = "native", strategy = "native")
@@ -16,7 +17,7 @@ public class ClientLoan {
     private int payments;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name="client_id")
+    @JoinColumn(name = "client_id")
     private Client client;
 
     @ManyToOne(fetch = FetchType.EAGER)
