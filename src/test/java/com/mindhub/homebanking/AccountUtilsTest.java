@@ -2,7 +2,6 @@ package com.mindhub.homebanking;
 
 import com.mindhub.homebanking.repositories.AccountRepository;
 import com.mindhub.homebanking.utils.AccountUtils;
-import com.mindhub.homebanking.utils.CardUtils;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;

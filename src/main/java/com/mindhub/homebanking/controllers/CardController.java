@@ -34,7 +34,7 @@ public class CardController {
 
     @PostMapping(path = "/clients/current/cards")
     public ResponseEntity<Object> createCard(Authentication authentication, @RequestParam CardType cardType, @RequestParam CardColor cardColor){
-        Client client =clientRepository.findByEmail(authentication.getName());
+        Client client = clientRepository.findByEmail(authentication.getName());
 
         if (cardRepository.findByClientAndType(client, cardType).size()>=3){
             return new ResponseEntity<>("Ya tiene 3 tarjetas de este tipo", HttpStatus.FORBIDDEN);
@@ -43,4 +43,17 @@ public class CardController {
         cardRepository.save(card);
         return new ResponseEntity<>("201 creada", HttpStatus.CREATED);
     }
+
+    @DeleteMapping(path = "/clients/current/cards")
+    public ResponseEntity<Object> deleteCard(Authentication authentication, @RequestParam String number){
+        Client client = clientRepository.findByEmail(authentication.getName());
+
+        // Verifico que el numero de tarjeta sea compatible con alguna de sus tarjetas
+        if(!client.getCards().contains(cardRepository.findByNumber(number))) {
+            return new ResponseEntity<>("Este numero no es compatible con sus tarjetas", HttpStatus.FORBIDDEN);
+        }
+        cardRepository.delete(cardRepository.findByNumber(number));
+        return new ResponseEntity<>("201 DELETE", HttpStatus.CREATED);
+    }
+
 }
