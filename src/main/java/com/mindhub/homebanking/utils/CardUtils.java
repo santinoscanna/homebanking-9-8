@@ -24,7 +24,7 @@ public final class CardUtils {
         return cardNumber;
     }
 
-    public static int generateCvv(int min, int max, CardRepository cardRepository) {
+    public static int generateCvv(int min, int max) {
         int cvv = (int) ((Math.random() * (max - min)) + min);
         return cvv;
     }

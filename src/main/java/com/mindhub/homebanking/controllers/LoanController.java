@@ -34,13 +34,13 @@ public class LoanController {
     @Autowired
     private ClientLoanRepository clientLoanRepository;
 
-    @RequestMapping(path = "/loans", method = RequestMethod.GET)
+    @GetMapping(path = "/loans")
     public List<LoanDTO> getAllLoans(){
         return loanRepository.findAll().stream().map(LoanDTO::new).collect(Collectors.toList());
     }
 
     @Transactional
-    @RequestMapping(path = "/loans", method = RequestMethod.POST)
+    @PostMapping(path = "/loans")
     public ResponseEntity<Object> applyingForLoans(Authentication authentication, @RequestBody LoanApplicationDTO loanApplicationDTO){
         Client client = clientRepository.findByEmail(authentication.getName());
         double amount = loanApplicationDTO.getAmount();
