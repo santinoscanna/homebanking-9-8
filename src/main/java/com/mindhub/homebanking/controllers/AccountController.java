@@ -2,6 +2,7 @@ package com.mindhub.homebanking.controllers;
 
 import com.mindhub.homebanking.dtos.AccountDTO;
 import com.mindhub.homebanking.models.Account;
+import com.mindhub.homebanking.models.AccountType;
 import com.mindhub.homebanking.models.Client;
 import com.mindhub.homebanking.models.Transaction;
 import com.mindhub.homebanking.repositories.AccountRepository;
@@ -54,16 +55,16 @@ public class AccountController {
     }
 
     @PostMapping("/clients/current/accounts")
-    public ResponseEntity<Object> createAccount(Authentication authentication){
+    public ResponseEntity<Object> createAccount(Authentication authentication, @RequestParam AccountType type){
         Client client = this.clientRepository.findByEmail(authentication.getName());
 
         if(client.getAccounts().size() >= 3){
             return new ResponseEntity<>("Ya tiene 3 cuentas", HttpStatus.FORBIDDEN);
         }
-        Account account = new Account(generateAccountNumber(10000000, 99999999, accountRepository), LocalDateTime.now(), 0);
+        Account account = new Account(generateAccountNumber(10000000, 99999999, accountRepository), LocalDateTime.now(), 0, type);
         client.addAccount(account);
         accountRepository.save(account);
-        return new ResponseEntity<>("201 creada", HttpStatus.CREATED);
+        return new ResponseEntity<>("201 created", HttpStatus.CREATED);
     }
 
     @DeleteMapping("/clients/current/accounts")
@@ -82,7 +83,7 @@ public class AccountController {
         Set<Transaction> deleteTransaction = accountRepository.findByNumber(number).getTransactions();
         transactionRepository.deleteAll(deleteTransaction);
         accountRepository.delete(accountRepository.findByNumber(number));
-        return new ResponseEntity<>("201 DELETE", HttpStatus.CREATED);
+        return new ResponseEntity<>("201 delete", HttpStatus.CREATED);
     }
 
 }

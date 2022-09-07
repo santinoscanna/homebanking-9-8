@@ -64,7 +64,7 @@ public class TransactionController {
             return new ResponseEntity<>("Tu cuenta no tiene el balance necesario para realizar esta transferencia", HttpStatus.FORBIDDEN);
         }
 
-        Transaction fromTransaction = new Transaction(TransactionType.DEBIT, -amount, toAccountNumber + description, fromAccount);
+        Transaction fromTransaction = new Transaction(TransactionType.DEBIT, -amount, toAccountNumber + " " + description, fromAccount);
         Transaction toTransaction = new Transaction(TransactionType.CREDIT, +amount, fromAccountNumber + description, toAccount);
         transactionRepository.save(fromTransaction);
         transactionRepository.save(toTransaction);
