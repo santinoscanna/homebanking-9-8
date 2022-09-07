@@ -7,6 +7,7 @@ public class LoanApplicationDTO {
     private int payments;
     private String toAccountNumber;
 
+
     public LoanApplicationDTO() {
     }
 
@@ -32,4 +33,6 @@ public class LoanApplicationDTO {
     public String getToAccountNumber() {
         return toAccountNumber;
     }
+
+
 }

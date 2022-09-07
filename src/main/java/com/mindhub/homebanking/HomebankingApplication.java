@@ -33,8 +33,8 @@ public class HomebankingApplication {
 			LocalDateTime tiempo2 = LocalDateTime.now().plusDays(1);
 
 			Client client1 = new Client("Santino", "Scannapieco", "tino@gmail.com", passwordEncoder.encode("112"));
-			Account account1 = new Account("VIN001", tiempo1,  5000);
-			Account account2 = new Account("VIN002", tiempo2,  7500);
+			Account account1 = new Account("VIN001", tiempo1,  5000, AccountType.CORRIENTE);
+			Account account2 = new Account("VIN002", tiempo2,  7500, AccountType.AHORRO);
 
 			client1.addAccount(account1);
 			client1.addAccount(account2);
@@ -43,8 +43,8 @@ public class HomebankingApplication {
 			accountRepository.save(account2);
 
 			Client client2 = new Client("Carlos", "Tevez", "tevez@gmail.com", passwordEncoder.encode("222"));
-			Account account3 = new Account("VIN003", tiempo1,  4000);
-			Account account4 = new Account("VIN004", tiempo2,  3500);
+			Account account3 = new Account("VIN003", tiempo1,  4000, AccountType.CORRIENTE);
+			Account account4 = new Account("VIN004", tiempo2,  3500,  AccountType.CORRIENTE);
 
 			client2.addAccount(account3);
 			client2.addAccount(account4);
@@ -64,9 +64,9 @@ public class HomebankingApplication {
 			transactionRepository.save(transaction4);
 
 
-			Loan loan1 = new Loan("Hipotecario", 500000, Arrays.asList(12,24,36,48,60));
-			Loan loan2 = new Loan("Personal", 100000, Arrays.asList(6,12,24));
-			Loan loan3 = new Loan("Automotriz", 300000, Arrays.asList(6,12,24,36));
+			Loan loan1 = new Loan("Hipotecario", 500000, Arrays.asList(12,24,36,48,60), 0.25);	// Este prestamo tiene 25% de interes
+			Loan loan2 = new Loan("Personal", 100000, Arrays.asList(6,12,24), 0.1);				// Este prestamo tiene 10% de interes
+			Loan loan3 = new Loan("Automotriz", 300000, Arrays.asList(6,12,24,36), 0.2);			// Este prestamo tiene 20% de interes
 
 			loanRepository.save(loan1);
 			loanRepository.save(loan2);

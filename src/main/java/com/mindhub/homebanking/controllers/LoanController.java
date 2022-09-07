@@ -34,20 +34,30 @@ public class LoanController {
     @Autowired
     private ClientLoanRepository clientLoanRepository;
 
-    @RequestMapping(path = "/loans", method = RequestMethod.GET)
+    @GetMapping(path = "/loans")
     public List<LoanDTO> getAllLoans(){
         return loanRepository.findAll().stream().map(LoanDTO::new).collect(Collectors.toList());
     }
 
+    @GetMapping(path = "client/current/loans")
+    public List<ClientLoanDTO> getCurrentClientLoans(Authentication authentication){
+        Client client = clientRepository.findByEmail(authentication.getName());
+        return client.getClientLoans().stream().map(ClientLoanDTO::new).collect(Collectors.toList());
+    }
+
     @Transactional
-    @RequestMapping(path = "/loans", method = RequestMethod.POST)
+    @PostMapping(path = "/loans")
     public ResponseEntity<Object> applyingForLoans(Authentication authentication, @RequestBody LoanApplicationDTO loanApplicationDTO){
         Client client = clientRepository.findByEmail(authentication.getName());
+
         double amount = loanApplicationDTO.getAmount();
         int payments = loanApplicationDTO.getPayments();
         String toAccountNumber = loanApplicationDTO.getToAccountNumber();
+
         Loan loan = loanRepository.findById(loanApplicationDTO.getLoanId());
         Account account = accountRepository.findByNumber(toAccountNumber);
+
+        double interest = loan.getInterest();
 
         if (amount < 1 || payments < 0 || loanApplicationDTO == null) {
             return new ResponseEntity<>("Missing data", HttpStatus.FORBIDDEN);
@@ -76,7 +86,7 @@ public class LoanController {
         String description = "Loan Approved";
         Transaction transaction = new Transaction(TransactionType.CREDIT, amount, description, account);
 
-        ClientLoan clientLoan = new ClientLoan(amount + (amount * 0.2), payments, client, loan);
+        ClientLoan clientLoan = new ClientLoan(amount + (amount * interest), payments, client, loan);
         clientLoanRepository.save(clientLoan);
 
         account.setBalance(account.getBalance() + amount);

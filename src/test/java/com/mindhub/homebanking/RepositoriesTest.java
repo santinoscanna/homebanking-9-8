@@ -50,7 +50,7 @@ public class RepositoriesTest {
         assertThat(accounts, is(not(empty())));
     }
     @Test
-    public void existsAccountID() {
+    public void existsAccountNumber() {
         List<Account> accounts = accountRepository.findAll();
         assertThat(accounts, hasItem(hasProperty("number", is("VIN001"))));
     }
@@ -88,6 +88,4 @@ public class RepositoriesTest {
         List<Transaction> transactions = transactionRepository.findAll();
     assertThat(transactions, hasItem(hasProperty("type", is(TransactionType.DEBIT))));
     }
-
-
 }

@@ -39,4 +39,6 @@ public class ClientLoanDTO {
     public int getPayments() {
         return payments;
     }
+
+
 }

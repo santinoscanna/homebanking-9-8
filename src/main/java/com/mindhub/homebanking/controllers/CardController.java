@@ -11,10 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -30,20 +27,33 @@ public class CardController {
     @Autowired
     private ClientRepository clientRepository;
 
-    @RequestMapping("/cards")
+    @GetMapping("/cards")
     public Set<CardDTO> getcards () {
         return this.cardRepository.findAll().stream().map(card -> new CardDTO(card)).collect(Collectors.toSet());
     }
 
-    @RequestMapping(path = "/clients/current/cards", method = RequestMethod.POST)
+    @PostMapping(path = "/clients/current/cards")
     public ResponseEntity<Object> createCard(Authentication authentication, @RequestParam CardType cardType, @RequestParam CardColor cardColor){
-        Client client =clientRepository.findByEmail(authentication.getName());
+        Client client = clientRepository.findByEmail(authentication.getName());
 
         if (cardRepository.findByClientAndType(client, cardType).size()>=3){
             return new ResponseEntity<>("Ya tiene 3 tarjetas de este tipo", HttpStatus.FORBIDDEN);
         }
-        Card card = new Card(client, cardType, cardColor, generateCardNumber(1000, 9999, cardRepository), generateCvv(100, 999, cardRepository));
+        Card card = new Card(client, cardType, cardColor, generateCardNumber(1000, 9999, cardRepository), generateCvv(100, 999));
         cardRepository.save(card);
         return new ResponseEntity<>("201 creada", HttpStatus.CREATED);
     }
+
+    @DeleteMapping(path = "/clients/current/cards")
+    public ResponseEntity<Object> deleteCard(Authentication authentication, @RequestParam String number){
+        Client client = clientRepository.findByEmail(authentication.getName());
+
+        // Verifico que el numero de tarjeta sea compatible con alguna de sus tarjetas
+        if(!client.getCards().contains(cardRepository.findByNumber(number))) {
+            return new ResponseEntity<>("Este numero no es compatible con sus tarjetas", HttpStatus.FORBIDDEN);
+        }
+        cardRepository.delete(cardRepository.findByNumber(number));
+        return new ResponseEntity<>("201 DELETE", HttpStatus.CREATED);
+    }
+
 }

@@ -23,27 +23,27 @@ public class ClientController {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    @RequestMapping("/clients")
+    @GetMapping("/clients")
     public Set<ClientDTO> getclients () {
         return this.clientRepository.findAll().stream().map(ClientDTO::new).collect(Collectors.toSet()); // .stream
     }
 
 
     // Preguntar sobre esto que no quedó claro //
-    @RequestMapping("/clients/{id}")
+    @GetMapping("/clients/{id}")
     public ClientDTO getClients(@PathVariable Long id) {
         if (clientRepository.findById(id).isPresent())
             return new ClientDTO(clientRepository.findById(id).get());
         return null;
     }
 
-    @RequestMapping("/clients/current")
+    @GetMapping("/clients/current")
     public ClientDTO getClient(Authentication authentication){
         Client client = this.clientRepository.findByEmail(authentication.getName());
         return new ClientDTO(client);
     }
 
-    @RequestMapping(path = "/clients", method = RequestMethod.POST)
+    @PostMapping(path = "/clients")
     public ResponseEntity<Object> createClient(@RequestParam String firstName,  @RequestParam String lastName,
                                                @RequestParam String email,      @RequestParam String password){
         if (firstName.isEmpty() || lastName.isEmpty() || email.isEmpty() || password.isEmpty()) {
