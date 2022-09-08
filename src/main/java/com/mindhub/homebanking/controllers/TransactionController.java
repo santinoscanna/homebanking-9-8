@@ -1,5 +1,6 @@
 package com.mindhub.homebanking.controllers;
 
+import com.mindhub.homebanking.dtos.TransactionDTO;
 import com.mindhub.homebanking.models.Account;
 import com.mindhub.homebanking.models.Client;
 import com.mindhub.homebanking.models.Transaction;
@@ -14,6 +15,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import javax.transaction.Transactional;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -76,6 +80,22 @@ public class TransactionController {
         accountRepository.save(toAccount);
 
         return new ResponseEntity<>("201 CREATED", HttpStatus.CREATED);
+    }
+
+    @GetMapping("/transactions/get")
+    public ResponseEntity<Object> createTransaction(Authentication authentication, @RequestParam String number, @RequestParam String fromDate, @RequestParam String thruDate){
+        Client client = this.clientRepository.findByEmail(authentication.getName());
+        Account account = accountRepository.findByNumber(number);
+
+        LocalDate from = LocalDate.parse ( fromDate ) ;
+        LocalDate thru = LocalDate.parse ( thruDate ) ;
+        LocalTime localTime = LocalTime.MIDNIGHT ;
+        LocalDateTime fromDateTime = LocalDateTime.of ( from , localTime ) ;
+        LocalDateTime thruDateTime = LocalDateTime.of ( thru , localTime ) ;
+
+        Set<TransactionDTO> transactionDTOSet = transactionRepository.findByDateBetween(fromDateTime, thruDateTime).stream()
+                .filter(transaction -> transaction.getAccount().equals(account)).map(TransactionDTO::new).collect(Collectors.toSet());
+        return new ResponseEntity<>("200 OK", HttpStatus.OK);
     }
 }
 
