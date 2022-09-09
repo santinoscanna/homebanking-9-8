@@ -18,6 +18,7 @@ import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -83,7 +84,7 @@ public class TransactionController {
     }
 
     @GetMapping("/transactions/get")
-    public Set<TransactionDTO> getTransactionsBetween(Authentication authentication, @RequestParam String number, @RequestParam String fromDate, @RequestParam String thruDate){
+    public Set<TransactionDTO> getTransactionsXToY(Authentication authentication, @RequestParam String number, @RequestParam String fromDate, @RequestParam String thruDate){
         Client client = this.clientRepository.findByEmail(authentication.getName());
         Account account = accountRepository.findByNumber(number);
 
