@@ -2,11 +2,8 @@ package com.mindhub.homebanking.controllers;
 
 import com.mindhub.homebanking.dtos.PaymentDTO;
 import com.mindhub.homebanking.models.*;
-import com.mindhub.homebanking.repositories.AccountRepository;
-import com.mindhub.homebanking.repositories.CardRepository;
-import com.mindhub.homebanking.repositories.ClientRepository;
+import com.mindhub.homebanking.repositories.*;
 
-import com.mindhub.homebanking.repositories.PaymentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +11,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import javax.transaction.Transactional;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -33,9 +31,12 @@ public class PaymentController {
     @Autowired
     private PaymentRepository paymentRepository;
 
+    @Autowired
+    private TransactionRepository transactionRepository;
+
     @GetMapping("/payments")
-    public Set<PaymentDTO> getPayment () {
-        return this.paymentRepository.findAll().stream().map(payment -> new PaymentDTO(payment)).collect(Collectors.toSet());
+    public List<PaymentDTO> getPayment () {
+        return this.paymentRepository.findAll().stream().map(PaymentDTO::new).collect(Collectors.toList());
     }
 
     @Transactional
@@ -73,6 +74,10 @@ public class PaymentController {
         Payment fromAccount = new Payment(accountNumber, cardNumber, cvv, -amount, description);
         paymentRepository.save(fromAccount);
         account.setBalance(accountBalance-amount);
+        accountRepository.save(account);
+        Transaction transaction = new Transaction(TransactionType.DEBIT, -amount, description, account);
+        accountRepository.save(account);
+        transactionRepository.save(transaction);
 
         return new ResponseEntity<>("201 CREATED", HttpStatus.CREATED);
     }
