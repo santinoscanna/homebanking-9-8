@@ -16,15 +16,17 @@ import java.util.Arrays;
 @SpringBootApplication
 public class HomebankingApplication {
 
+	/*
 	@Autowired
 	private PasswordEncoder passwordEncoder;
-
+	*/
 	public static void main(String[] args) {
 		SpringApplication.run(HomebankingApplication.class, args);
 		System.out.println("Bienvenidos");
 
 	}
 
+	/*
 	@Bean		// Metodo para generar datos de prueba.
 	public CommandLineRunner initData(ClientRepository clientRepository, AccountRepository accountRepository, TransactionRepository transactionRepository, LoanRepository loanRepository, ClientLoanRepository clientLoanRepository, CardRepository cardRepository) {
 		return (args)->
@@ -94,6 +96,6 @@ public class HomebankingApplication {
 
 
 		};
-	}
+	}*/
 }
 
