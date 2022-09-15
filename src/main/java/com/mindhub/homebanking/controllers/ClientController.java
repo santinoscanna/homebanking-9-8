@@ -28,8 +28,6 @@ public class ClientController {
         return this.clientRepository.findAll().stream().map(ClientDTO::new).collect(Collectors.toSet()); // .stream
     }
 
-
-    // Preguntar sobre esto que no quedó claro //
     @GetMapping("/clients/{id}")
     public ClientDTO getClients(@PathVariable Long id) {
         if (clientRepository.findById(id).isPresent())
